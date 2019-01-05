@@ -2,6 +2,7 @@ import redis
 import json
 import csv
 
+
 class Runner:
 
     host = "hilmi.ddns.net"
@@ -28,4 +29,5 @@ class Runner:
 
 if __name__ == '__main__':
     r = Runner()
-    r.parse_csv("data/test.csv")
+    while True:
+        r.parse_csv("data/test.csv")
