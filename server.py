@@ -14,3 +14,4 @@ counter = 0
 while True:
     queue.publish("main-channel", counter)
     counter = counter + 1
+    time.sleep(0.2)

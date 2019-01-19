@@ -6,7 +6,6 @@ from io import StringIO
 
 
 class Runner:
-
     host = "hilmi.ddns.net"
     port = 20114
     db = 0
@@ -29,16 +28,17 @@ class Runner:
         while True:
             message = self.get_json()
             if message and message['data'] != 1:
+                print(message)
                 data = message['data'].decode('utf-8')
                 data_json = json.loads(data)
-                #df = pd.DataFrame.from_dict(data.items(), orient='index', columns=data.keys())
-
-                # #normalized_json = json_normalize(message)
+                # #df = pd.DataFrame.from_dict(data.items(), orient='index', columns=data.keys())
                 #
-                #df = pd.read_json(data)
-                df = pd.DataFrame(data_json, index=[0])
-                with pd.option_context('display.max_rows', None, 'display.max_columns', None):
-                    print(df)
+                # # #normalized_json = json_normalize(message)
+                # #
+                # #df = pd.read_json(data)
+                # df = pd.DataFrame(data_json, index=[0])
+                # with pd.option_context('display.max_rows', None, 'display.max_columns', None):
+                #     print(df)
 
 
 if __name__ == '__main__':
