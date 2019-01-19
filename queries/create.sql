@@ -1,4 +1,5 @@
-CREATE TABLE endurance (
+CREATE TABLE competition.sessions (
+Session INT,
 Interval INT,
 Utc DOUBLE,
 RearRight DOUBLE,
@@ -39,4 +40,4 @@ SectorTime INT,
 PredTime INT,
 ElapsedTime INT,
 CurrentLap INT,
- PRIMARY KEY (Interval, Utc)); 
+ PRIMARY KEY (Session, Interval, Utc));

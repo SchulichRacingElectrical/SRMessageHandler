@@ -2,6 +2,8 @@ import redis
 import json
 import csv
 from cassandra.cluster import Cluster
+from cassandra.query import dict_factory
+import time
 
 
 class Runner:
@@ -21,19 +23,22 @@ class Runner:
         self.p.subscribe(self.channel)
         cluster = Cluster([self.host])
         self.session = cluster.connect('competition')
+        self.session.row_factory = dict_factory
 
     def send_json(self, message):
-        self.r.publish("main-channel", message)
+        self.r.publish("competition-channel", message)
 
-    def get_table(self):
-        query = f"SELECT * FROM endurance"
+    def process_table(self):
+
+        query = f"SELECT * FROM sessions WHERE session=1 ORDER BY interval"
         stmt = self.session.prepare(query)
         results = self.session.execute(stmt)
-        #print(json.dumps(dict(results)))
-        for row in results:
-            row_json = dict(json.dumps(row))
-            print(row_json)
 
+        for row in results:
+            row_json = json.dumps(row)
+            self.send_json(row_json)
+
+    # For OG runner
     def parse_csv(self, filename):
         with open(filename) as f:
             for row in csv.DictReader(f):
@@ -42,4 +47,8 @@ class Runner:
 
 if __name__ == '__main__':
     r = Runner()
-    r.get_table()
+    while True:
+        print("Transfer started...")
+        r.process_table()
+        print("Finished reading from competition.sessions table.")
+        time.sleep(2)
